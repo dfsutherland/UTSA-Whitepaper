@@ -3677,7 +3677,7 @@ ad hoc
 \begin_layout Standard
 \begin_inset CommandInset bibtex
 LatexCommand bibtex
-bibfiles "/Users/dfsuther/Dropbox/School/Papers/ThesisBib"
+bibfiles "ThesisBib"
 options "plain"
 
 \end_inset
