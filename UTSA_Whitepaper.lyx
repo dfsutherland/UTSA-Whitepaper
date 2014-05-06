@@ -1,5 +1,5 @@
-#LyX 2.0 created this file. For more info see http://www.lyx.org/
-\lyxformat 413
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
 \begin_document
 \begin_header
 \textclass IEEEtran
@@ -12,13 +12,13 @@
 \font_roman default
 \font_sans default
 \font_typewriter default
+\font_math auto
 \font_default_family default
 \use_non_tex_fonts false
 \font_sc false
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
-
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -29,15 +29,24 @@
 \use_hyperref false
 \papersize default
 \use_geometry false
-\use_amsmath 1
-\use_esint 1
-\use_mhchem 1
-\use_mathdots 1
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 0
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 0
+\use_package mhchem 1
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
 \cite_engine basic
+\cite_engine_type default
+\biblio_style plain
 \use_bibtopic false
 \use_indices false
 \paperorientation portrait
 \suppress_date false
+\justification true
 \use_refstyle 1
 \index Index
 \shortcut idx
@@ -66,7 +75,7 @@ Unified Thread Safety Analysis
 
 \begin_layout Author
 Dean F.
- Sutherland & DeLesley Hutchins
+ Sutherland, DeLesley Hutchins & Aaron Ballman
 \end_layout
 
 \begin_layout Abstract
@@ -292,8 +301,8 @@ key "Sutherland2002,Sutherland2008,Sutherland2010"
  in lockless situations such as thread confinement and also enforces constraints
  on architectural coupling and dependency.
  It allows users to declare various "roles" threads may perform, identify
- program points where thread roles are added to---or removed from---the
- set of roles held by "the current thread" (that is, any thread that executes
+ program points where thread roles are added to—or removed from—the set
+ of roles held by "the current thread" (that is, any thread that executes
  that program point), and identify constraints on methods and/or data that
  specify which combinations of thread roles are permitted to invoke the
  annotated method (or access the annotated data).
@@ -357,7 +366,7 @@ Successful design and engineering of a static analysis requires knowledge
  be quite small in realistic programs.
  The maximum number of distinct roles seen in any Java system was less than
  32.
- Additionally an individual thread role is typically relevant to a large
+ Additionally, an individual thread role is typically relevant to a large
  region of code, often a substantial fraction of the entire program being
  analyzed.
  
@@ -388,8 +397,8 @@ note
 \begin_layout Standard
 This unified implementation approach provides benefits both for analysis
  developers and their users.
- Analysis developers can provide both analyses---rather than either analysis
- alone---for very little additional effort, while also supporting an expanded
+ Analysis developers can provide both analyses—rather than either analysis
+ alone—for very little additional effort, while also supporting an expanded
  set of use-cases.
  Analysis users not only gain the benefit of two styles of concurrency analysis
  with multiple modes of operation, but also gain synergistic benefits beyond
@@ -416,8 +425,11 @@ Thread Safety Annotation Language
 
 \begin_layout Standard
 The new combined analysis treats both mutexes and thread roles as specialized
- flavors of capability, which may be held, not held, or unknown-whether-held
- individually.
+ flavors of 
+\emph on
+capability
+\emph default
+, which may be held, not held, or unknown-whether-held individually.
  The shared underlying framework treats each flavor of capability identically.
  This design choice allows us to build a combined thread safety analysis
  that has uniform syntax and semantics.
@@ -430,9 +442,9 @@ The new combined analysis treats both mutexes and thread roles as specialized
 The combined analysis allows users to establish both data locking policies
  and thread usage policies using relatively few annotations.
  Users express their locking discipline by writing annotations that indicate
- which mutex protects which data as well as annotations that establish partial
+ which mutex protects what data as well as annotations that establish partial
  orders for lock acquisition.
- User express thread usage policy by writing annotations that declare which
+ Users express thread usage policy by writing annotations that declare which
  thread roles may execute particular code segments or access particular
  data items.
  Annotations are also used to establish rules regarding relationships between
@@ -452,7 +464,7 @@ A key difference in how the underlying framework treats mutexes and thread
 only
 \emph default
  as capabilities; they lack runtime existence.
- However, for uniformity of implementation certain thread role annotations
+ However, for uniformity of implementation, certain thread role annotations
  depend on the presence of notional thread role variables, which exist solely
  to support the analysis.
  To meet the requirement of full erasability, our analysis implementation
@@ -469,7 +481,6 @@ variable
  When capabilities are erased, these mutex variables are necessarily untouched;
  thus, the mutex variables continue to exist at runtime and remain in the
  program as written.
- 
 \end_layout
 
 \begin_layout Subsubsection
@@ -489,12 +500,17 @@ class CAPABILITY("mutex") Mutex {
 
 \begin_layout Plain Layout
 
-  void Lock()	ACQUIRE(this) {...}
+public:
 \end_layout
 
 \begin_layout Plain Layout
 
-  void Unlock()  RELEASE(this) {...}
+  void lock()	ACQUIRE(this) {...}
+\end_layout
+
+\begin_layout Plain Layout
+
+  void lnlock()  RELEASE(this) {...}
 \end_layout
 
 \begin_layout Plain Layout
@@ -504,7 +520,12 @@ class CAPABILITY("mutex") Mutex {
 
 \begin_layout Plain Layout
 
-class CAPABILITY("thread-role") ThreadRole {
+class CAPABILITY("role") ThreadRole {
+\end_layout
+
+\begin_layout Plain Layout
+
+public:
 \end_layout
 
 \begin_layout Plain Layout
@@ -519,12 +540,32 @@ class CAPABILITY("thread-role") ThreadRole {
 
 \begin_layout Plain Layout
 
-);
+  ThreadRole& operator||(ThreadRole&) { return *this; }
 \end_layout
 
 \begin_layout Plain Layout
 
-class SHARED_CAPABILITY("thread-role") SharedThreadRole {...};
+  ThreadRole& operator&&(ThreadRole&) { return *this; }
+\end_layout
+
+\begin_layout Plain Layout
+
+  ThreadRole& operator!() { return *this; }
+\end_layout
+
+\begin_layout Plain Layout
+
+};
+\end_layout
+
+\begin_layout Plain Layout
+
+class SHARED_CAPABILITY("role") SharedThreadRole
+\end_layout
+
+\begin_layout Plain Layout
+
+  : public ThreadRole {};
 \end_layout
 
 \begin_layout Plain Layout
@@ -540,7 +581,7 @@ SharedThreadRole Worker;
 \begin_layout Plain Layout
 
 Mutex mu;
-\begin_inset Caption
+\begin_inset Caption Standard
 
 \begin_layout Plain Layout
 \begin_inset CommandInset label
@@ -564,7 +605,7 @@ Example Capability Declarations
 
 \begin_layout Standard
 Capabilities are declared by introducing variables or objects whose type
- is a C++ class (or C struct) decorated with the 
+ is decorated with the 
 \begin_inset listings
 lstparams "basicstyle={\ttfamily},breaklines=true"
 inline true
@@ -654,7 +695,7 @@ SharedThreadRole
 
 \end_inset
 
- are provided for users in library code; see lines 1, 5, and 9 of listing
+ are provided for users in library code; see lines 1, 6, and 14 of listing
  
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -663,8 +704,23 @@ reference "lis:Example-Capability-Declarations"
 \end_inset
 
 .
+ The declaration of the 
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},breaklines=true"
+inline true
+status open
+
+\begin_layout Plain Layout
+
+ThreadRole
+\end_layout
+
+\end_inset
+
+ class includes overloaded Boolean operators (lines 10-13) for use in subsequent
+ annotations.
  Declarations of objects of these types introduce capabilities of the stated
- flavor; see lines 10-12 of listing 
+ flavor; see lines 16-18 of listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lis:Example-Capability-Declarations"
@@ -688,7 +744,7 @@ reference "lis:Example-Capability-Declarations"
 \begin_layout Standard
 To ensure complete erasure of capabilities, all thread safety annotations
  are wrapped in macros that remove them from the code when thread safety
- analysis is turned off; these macros are written as 
+ analysis is disabled; these macros are written as 
 \begin_inset listings
 lstparams "basicstyle={\ttfamily},breaklines=true"
 inline true
@@ -729,7 +785,7 @@ status open
  thread role type and object declarations are similarly protected by macros
  that remove them from the code when thread safety analysis is turned off;
  these macros are elided from our examples for clarity of presentation.
- When the analysis is turned on, our implementation ensures that user code
+ When the analysis is enabled, our implementation ensures that user code
  refers to the notional thread role objects only as names in annotations
  or annotation macros; all non-annotation references to these objects are
  deleted from the compiler's syntax tree before code generation.
@@ -750,7 +806,7 @@ status open
 
 \begin_layout Plain Layout
 
-Lock()
+lock()
 \end_layout
 
 \end_inset
@@ -763,12 +819,12 @@ status open
 
 \begin_layout Plain Layout
 
-Unlock()
+unlock()
 \end_layout
 
 \end_inset
 
- methods (see lines 2 and 3 of listing 
+ methods (see lines 3 and 4 of listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lis:Example-Capability-Declarations"
@@ -777,7 +833,7 @@ reference "lis:Example-Capability-Declarations"
 
 ).
  For thread roles, these are notional methods that are optimized away before
- runtime because thread roles have no runtime existence (lines 6 and 7).
+ runtime because thread roles have no runtime existence (lines 8 and 9).
  In either case, the capabilities are acquired or released when the method
  is invoked.
  The analysis also supports 
@@ -803,13 +859,13 @@ status open
 
 \begin_layout Plain Layout
 
-TryLock()
+tryLock()
 \end_layout
 
 \end_inset
 
  style methods, whose specification states that they acquire the lock if
- it is available and return without waiting if the lock is held by another
+ it is available and return without blocking if the lock is held by another
  thread.
 \end_layout
 
@@ -834,12 +890,12 @@ Mutex mu2 ACQUIRED_AFTER(mu);
 
 \begin_layout Plain Layout
 
-[[incompatible(FlightControl, Logger)]]
+INCOMPATIBLE(FlightControl, Logger);
 \end_layout
 
 \begin_layout Plain Layout
 
-//equivalent expression is ((FlightControl && !Logger) || 
+// Equivalent expression is ((FlightControl && !Logger) || 
 \end_layout
 
 \begin_layout Plain Layout
@@ -849,12 +905,12 @@ Mutex mu2 ACQUIRED_AFTER(mu);
 
 \begin_layout Plain Layout
 
-INCOMPATIBLE(FlightControl, Logger, Worker)
+INCOMPATIBLE(FlightControl, Logger, Worker);
 \end_layout
 
 \begin_layout Plain Layout
 
-\begin_inset Caption
+\begin_inset Caption Standard
 
 \begin_layout Plain Layout
 \begin_inset CommandInset label
@@ -975,7 +1031,7 @@ reference "lis:Lock-order"
  is held.
  This expression is applied as a global constraint to any capability expression
  or test that involves any of the named capabilities.
- The 
+ The initial 
 \begin_inset listings
 lstparams "basicstyle={\ttfamily},breaklines=true"
 inline true
@@ -983,7 +1039,7 @@ status open
 
 \begin_layout Plain Layout
 
-[[incompatible(...)]]
+INCOMPATIBLE
 \end_layout
 
 \end_inset
@@ -1065,12 +1121,12 @@ status open
 
 \begin_layout Plain Layout
 
-void enQueueLogData(...) REQUIRES(FlightControl || Worker);
+void enqueueLogData(...) REQUIRES(FlightControl || Worker);
 \end_layout
 
 \begin_layout Plain Layout
 
-unsigned long[] deQueueLogData(...) REQUIRES(Logger);
+std::string dequeueLogData(...) REQUIRES(Logger);
 \end_layout
 
 \begin_layout Plain Layout
@@ -1080,7 +1136,7 @@ bool moveAileron(...) REQUIRES(FlightControl);
 
 \begin_layout Plain Layout
 
-\begin_inset Caption
+\begin_inset Caption Standard
 
 \begin_layout Plain Layout
 \begin_inset CommandInset label
@@ -1198,9 +1254,9 @@ reference "lis:Requirements-for-Code"
 \end_layout
 
 \begin_layout Standard
-There is an important distinction, however, between functions whose capability
- requirement is not yet known---perhaps because a required annotation is
- missing---and functions that are unconstrained by design.
+There is an important distinction between functions whose capability requirement
+ is not yet known—perhaps because a required annotation is missing—and functions
+ that are unconstrained by design.
  
 \emph on
 Unconstrained
@@ -1214,7 +1270,7 @@ status open
 
 \begin_layout Plain Layout
 
-[[requires(true)]]
+REQUIRES(true)
 \end_layout
 
 \end_inset
@@ -1222,7 +1278,7 @@ status open
 .
  The implementation of an unconstrained method must be limited to call only
  other unconstrained methods.
- One common case of unconstrained methods is pure functions, whose output
+ One common case of unconstrained methods are pure functions, whose output
  depends entirely on their input parameters; for example, many math functions
  from the standard libraries have this property.
  The multithreaded Listener pattern provides another example; its methods
@@ -1231,8 +1287,8 @@ status open
 \end_layout
 
 \begin_layout Standard
-Any method or function can be annotated with a capability requirement (see
- listing 
+Any function can be annotated with a capability requirement (see listing
+ 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lis:Requirements-for-Code"
@@ -1240,8 +1296,8 @@ reference "lis:Requirements-for-Code"
 \end_inset
 
 ).
- Methods and functions may require either exclusive or shared capabilities
- for mutexes, using the 
+ Functions may require either exclusive or shared capabilities for mutexes,
+ using the 
 \begin_inset listings
 lstparams "basicstyle={\ttfamily},breaklines=true"
 inline true
@@ -1337,7 +1393,7 @@ status open
 
 \begin_layout Plain Layout
 
-enQueueLogData
+enqueueLogData
 \end_layout
 
 \end_inset
@@ -1389,7 +1445,7 @@ status open
 
 \begin_layout Plain Layout
 
-deQueueLogData
+dequeueLogData
 \end_layout
 
 \end_inset
@@ -1522,7 +1578,7 @@ status open
 
 \begin_layout Plain Layout
 
-vector<unsigned long> logDataQueue GUARDED_BY(mu)
+std::vector<std::string> logDataQueue GUARDED_BY(mu)
 \end_layout
 
 \begin_layout Plain Layout
@@ -1536,7 +1592,7 @@ vector<unsigned long> logDataQueue GUARDED_BY(mu)
 
 \begin_layout Plain Layout
 
-// in enQueueLogData
+// in enqueueLogData
 \end_layout
 
 \begin_layout Plain Layout
@@ -1556,7 +1612,7 @@ mu.Unlock();
 
 \begin_layout Plain Layout
 
-\begin_inset Caption
+\begin_inset Caption Standard
 
 \begin_layout Plain Layout
 \begin_inset CommandInset label
@@ -1609,7 +1665,7 @@ status open
 
 \begin_layout Plain Layout
 
-enQueueLogData
+enqueueLogData
 \end_layout
 
 \end_inset
@@ -1685,7 +1741,7 @@ status open
 
 \begin_layout Plain Layout
 
-enQueueLogData
+enqueueLogData
 \end_layout
 
 \end_inset
@@ -1782,8 +1838,8 @@ Our current static analysis tool lacks support for alias analysis.
  pointer.
  However, any access that names the class or structure (or field contained
  therein) provides sufficient information to support the analysis.
- Another, more important consequence is that the analysis cannot track reference
-s through aliases that point 
+ Another, more important, consequence is that the analysis cannot track
+ references through aliases that point 
 \emph on
 within
 \emph default
@@ -1899,6 +1955,11 @@ class CAPABILITY("mutex") Mutex {
 
 \begin_layout Plain Layout
 
+public:
+\end_layout
+
+\begin_layout Plain Layout
+
   void assertHeld() ASSERT_CAPABILITY(this) {...}
 \end_layout
 
@@ -1923,7 +1984,7 @@ bool runningOnLoggerThread() TEST_CAPABILITY(Logger, !Logger) {...}
 
 \begin_layout Plain Layout
 
-\begin_inset Caption
+\begin_inset Caption Standard
 
 \begin_layout Plain Layout
 \begin_inset CommandInset label
