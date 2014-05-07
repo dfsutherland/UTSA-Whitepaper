@@ -60,11 +60,12 @@
 \papercolumns 1
 \papersides 1
 \paperpagestyle default
-\tracking_changes false
+\tracking_changes true
 \output_changes false
 \html_math_output 0
 \html_css_as_file 0
 \html_be_strict false
+\author -212917129 "Dean Sutherland" 
 \end_header
 
 \begin_body
@@ -84,9 +85,21 @@ Remains to be written
 
 \begin_layout Section
 Introduction
+\change_inserted -212917129 1399395943
+
 \end_layout
 
 \begin_layout Standard
+
+\change_inserted -212917129 1399395930
+
+\emph on
+\begin_inset Note Comment
+status open
+
+\begin_layout Plain Layout
+
+\change_inserted -212917129 1399395930
 
 \emph on
 <<Intro needs significant re-write to (a) shorten by half, and (b) replace
@@ -94,7 +107,129 @@ Introduction
  Last two paragraphs of intro propably stay.>>
 \end_layout
 
+\begin_layout Plain Layout
+
+\change_inserted -212917129 1399395930
+Many modern software systems employ shared-memory multi-threading and are
+ built using components such as libraries and frameworks.
+ As a result, developers must manage the interactions between multiple threads
+ as they execute within those components.
+ To manage this complexity, developers assume that the libraries and frameworks
+ they use will explicitly specify all of the necessary policies, preconditions,
+ and postconditions ("thread-related policies", hereafter) of the design
+ contract.
+ However, many library and framework interfaces lack explicit specifications
+ regarding threading and concurrency issues.
+ In the absence of explicit specifications, developers cannot comply with
+ the unstated thread-related policies.
+ This can lead to errors such as state corruption and deadlock, and can
+ be a significant cause of security vulnerabilities.
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+\change_inserted -212917129 1399395930
+Writing code that obeys thread-related policies is difficult, even when
+ the policies are known.
+ There are many questions that must be answered by the programmer, such
+ as:
+\end_layout
+
+\begin_layout Quotation
+
+\change_inserted -212917129 1399395930
+"Does the policy permit me to touch that data from this function or method?
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+
+\change_inserted -212917129 1399395930
+Because our analysis applies to both C and C++ code, this paper uses the
+ terms function and method interchangeably.
+\end_layout
+
+\end_inset
+
+ Does it permit me to invoke that method from here? Is that data protected
+ by a mutex?
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+
+\change_inserted -212917129 1399395930
+Mutex is the typical term used in C and C++ to denote a variable that serves
+ as a lock.
+ We will use the terms mutex and lock interchangeably in this document.
+\end_layout
+
+\end_inset
+
+ Which mutex protects that data? Do I currently hold the mutex that must
+ be held to execute that function? What threads might execute this portion
+ of the code, and should they be permitted to do so?"
+\end_layout
+
+\begin_layout Plain Layout
+
+\change_inserted -212917129 1399395930
+The answers to these questions can be both hard to find in documentation
+ and difficult or impossible to glean from inspection of code.
+ To make matters worse, the need to even ask these questions may not be
+ apparent to many programmers.
+ Yet similar questions arise for each and every data reference and method
+ invocation that executes in the context of a multithreaded system.
+\end_layout
+
+\begin_layout Plain Layout
+
+\change_inserted -212917129 1399395930
+When failures occur, programmers have trouble debugging multi-threaded code,
+ in part because the symptoms they observe may lack an obvious connection
+ to threading.
+ Symptoms can include intermittent and seemingly-random data corruption,
+ unexpected system or component pauses or freezes, and occasional obscure
+ misbehavior of the application.
+ The manifestation of such errors and failures at runtime is often dependent
+ on conditions such as timing, context, load, and processor architecture.
+ Change the conditions or the timing—by using the debugger, for example—and
+ the symptom may change or disappear.
+ Alternatively, failures or errors may occur on one out of each million
+ executions of the faulty code; this is nearly impossible to isolate in
+ a debugger, but still frequent enough to be an issue for long-running or
+ frequently-run applications.
+\end_layout
+
+\begin_layout Plain Layout
+
+\change_inserted -212917129 1399395930
+Because debugging these errors and failures is so difficult, programmers
+ often fall back on code reviews to help locate the underlying faults in
+ the code.
+ However, code reviews have limited effectiveness when addressing non-local
+ properties such as thread-related policy compliance; the consequences of
+ those properties are spread widely and thinly throughout the code.
+ This non-locality also means that every instance of each consequence must
+ be handled correctly; if even one is wrong, the program may fail.
+ These difficulties make static analysis an attractive alternative.
+\change_unchanged
+
+\end_layout
+
+\end_inset
+
+
+\change_deleted -212917129 1399395930
+<<Intro needs significant re-write to (a) shorten by half, and (b) replace
+ text reused from prior papers.
+ Last two paragraphs of intro propably stay.>>
+\end_layout
+
 \begin_layout Standard
+
+\change_deleted -212917129 1399395930
 Many modern software systems employ shared-memory multi-threading and are
  built using components such as libraries and frameworks.
  As a result, developers must manage the interactions between multiple threads
@@ -113,6 +248,8 @@ Many modern software systems employ shared-memory multi-threading and are
 \end_layout
 
 \begin_layout Standard
+
+\change_deleted -212917129 1399395930
 Writing code that obeys thread-related policies is difficult, even when
  the policies are known.
  There are many questions that must be answered by the programmer, such
@@ -120,6 +257,8 @@ Writing code that obeys thread-related policies is difficult, even when
 \end_layout
 
 \begin_layout Quotation
+
+\change_deleted -212917129 1399395930
 "Does the policy permit me to touch that data from this function or method?
 \begin_inset Foot
 status collapsed
@@ -150,6 +289,8 @@ Mutex is the typical term used in C and C++ to denote a variable that serves
 \end_layout
 
 \begin_layout Standard
+
+\change_deleted -212917129 1399395930
 The answers to these questions can be both hard to find in documentation
  and difficult or impossible to glean from inspection of code.
  To make matters worse, the need to even ask these questions may not be
@@ -159,6 +300,8 @@ The answers to these questions can be both hard to find in documentation
 \end_layout
 
 \begin_layout Standard
+
+\change_deleted -212917129 1399395930
 When failures occur, programmers have trouble debugging multi-threaded code,
  in part because the symptoms they observe may lack an obvious connection
  to threading.
@@ -176,6 +319,8 @@ When failures occur, programmers have trouble debugging multi-threaded code,
 \end_layout
 
 \begin_layout Standard
+
+\change_deleted -212917129 1399395930
 Because debugging these errors and failures is so difficult, programmers
  often fall back on code reviews to help locate the underlying faults in
  the code.
@@ -185,16 +330,53 @@ Because debugging these errors and failures is so difficult, programmers
  This non-locality also means that every instance of each consequence must
  be handled correctly; if even one is wrong, the program may fail.
  These difficulties make static analysis an attractive alternative.
+\change_inserted -212917129 1399406064
+
 \end_layout
 
 \begin_layout Standard
+
+\change_inserted -212917129 1399407265
+Writing concurrent programs is a challenging task.
+ In addition to the familiar programming errors encountered in sequential
+ programming, developers must also consider the potential interactions between
+ concurrently executing threads.
+ Experience has shown that developers need help using concurrency correctly
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Asanovic:2009"
+
+\end_inset
+
+.
+ An additional source of difficulty is that  
+\end_layout
+
+\begin_layout Standard
+
+\change_inserted -212917129 1399407061
+Static analysis tools can provide this help.
+ The 
+\change_deleted -212917129 1399407061
+
+\end_layout
+
+\begin_layout Standard
+
+\change_deleted -212917129 1399407061
 In spite of the rich literature regarding static analysis for lock-based
  concurrency, C and C++ programmers largely lack access to effective static
  analysis tools that address concurrency issues.
  One of the few widely-available C and C++ static analysis tools is the
- open source Clang static analyzer, which provides a useful thread-safety
- analysis that covers a limited—but interesting—subset of lock-based thread-safe
-ty cases.
+ 
+\change_unchanged
+open source Clang static analyzer
+\change_deleted -212917129 1399407072
+, which
+\change_unchanged
+ provides a useful thread-safety analysis that covers a limited—but interesting—
+subset of lock-based thread-safety cases.
  However, it lacks support for analysis of concurrency issues that are not
  lock-centric, such as thread confinement of data and expression of thread
  usage policy.
@@ -211,7 +393,12 @@ The goals of this work are to enable C and C++ framework and library authors
  for access control, (b) enhancing Clang's existing lock-based analysis
  to be more powerful and easier to maintain, (c) providing a cross-translation-u
 nit annotation inference tool that reduces the number of required hand-written
- annotations, and also (d) improving error reporting by tracking the origin
+ annotations, and also (d) improving error reporting by tracking the 
+\change_deleted -212917129 1399395806
+origin
+\change_inserted -212917129 1399395808
+provenance
+\change_unchanged
  of each finding.
  We apply previously-known algorithms and techniques in a novel combination
  to produce actionable analysis results in a timely fashion.
