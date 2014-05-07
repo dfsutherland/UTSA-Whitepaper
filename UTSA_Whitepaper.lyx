@@ -336,7 +336,7 @@ Because debugging these errors and failures is so difficult, programmers
 
 \begin_layout Standard
 
-\change_inserted -212917129 1399407265
+\change_inserted -212917129 1399491489
 Writing concurrent programs is a challenging task.
  In addition to the familiar programming errors encountered in sequential
  programming, developers must also consider the potential interactions between
@@ -350,26 +350,24 @@ key "Asanovic:2009"
 \end_inset
 
 .
- An additional source of difficulty is that  
+ An additional source of difficulty is that  many frameworks and libraries
+ not only impose concurrency and thread-related policies on their clients,
+ but also lack explicit documentation of those policies.
+ Where such policies are clearly documented, that documentation frequently
+ takes the form of explanatory prose rather than a checkable specification.
 \end_layout
 
 \begin_layout Standard
 
-\change_inserted -212917129 1399407061
-Static analysis tools can provide this help.
- The 
-\change_deleted -212917129 1399407061
-
-\end_layout
-
-\begin_layout Standard
-
-\change_deleted -212917129 1399407061
+\change_deleted -212917129 1399407072
 In spite of the rich literature regarding static analysis for lock-based
  concurrency, C and C++ programmers largely lack access to effective static
  analysis tools that address concurrency issues.
  One of the few widely-available C and C++ static analysis tools is the
  
+\change_inserted -212917129 1399491391
+Static analysis tools can provide this help.
+ The 
 \change_unchanged
 open source Clang static analyzer
 \change_deleted -212917129 1399407072
@@ -383,11 +381,21 @@ subset of lock-based thread-safety cases.
 \end_layout
 
 \begin_layout Standard
-The goals of this work are to enable C and C++ framework and library authors
- to provide checkable specifications of their thread-related policies and
+The goals of this work are 
+\change_inserted -212917129 1399491575
+not only 
+\change_deleted -212917129 1399491581
+to enable C and C++ framework and library authors to provide checkable specifica
+tions of their thread-related policies and
+\change_unchanged
  to create a static analysis tool that can help C and C++ programmers find
  their concurrency errors for an interesting subset of both lock-based and
- non-lock-based cases.
+ non-lock-based cases
+\change_inserted -212917129 1399491603
+, but also to enable C and C++ framework and library authors to provide
+ checkable specifications of their concurrency and thread-related policies
+\change_unchanged
+.
  We accomplish this by (a) extending Clang's existing lock-based thread
  safety analysis for concurrency to include a policy-based thread role analysis
  for access control, (b) enhancing Clang's existing lock-based analysis
@@ -396,10 +404,14 @@ nit annotation inference tool that reduces the number of required hand-written
  annotations, and also (d) improving error reporting by tracking the 
 \change_deleted -212917129 1399395806
 origin
-\change_inserted -212917129 1399395808
+\change_inserted -212917129 1399491588
 provenance
 \change_unchanged
- of each finding.
+ of each 
+\change_inserted -212917129 1399491648
+analysis 
+\change_unchanged
+finding.
  We apply previously-known algorithms and techniques in a novel combination
  to produce actionable analysis results in a timely fashion.
 \end_layout
