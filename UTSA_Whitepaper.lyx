@@ -85,38 +85,26 @@ Remains to be written
 
 \begin_layout Section
 Introduction
-\change_inserted -212917129 1399571424
-
 \end_layout
 
 \begin_layout Standard
-
-\change_inserted -212917129 1399571425
 \begin_inset Note Note
 status open
 
 \begin_layout Plain Layout
-
-\change_inserted -212917129 1399571425
 Bits of awesomeness from our design that we need to call out: 
 \end_layout
 
 \begin_layout Enumerate
-
-\change_inserted -212917129 1399571425
 two concurrency analyses for the price of one
 \end_layout
 
 \begin_layout Enumerate
-
-\change_inserted -212917129 1399571425
 Support for use cases spanning spectrum from per-TU-w/-full-local-annotation
  to per-big-chunk-w/-minimal-annotation (and hybrids in between)
 \end_layout
 
 \begin_layout Enumerate
-
-\change_inserted -212917129 1399571425
 Demonstration that computing provenance of results is 
 \series bold
 trivial
@@ -126,14 +114,10 @@ trivial
 \end_layout
 
 \begin_layout Enumerate
-
-\change_inserted -212917129 1399571425
 Supporting Boolean logic broadens analysis toolkit generally.
 \end_layout
 
 \begin_layout Plain Layout
-
-\change_inserted -212917129 1399571425
 Need to make sure these things are highlighted in the intro, not hidden
  in the last paragraph.
 \end_layout
@@ -145,16 +129,12 @@ Need to make sure these things are highlighted in the intro, not hidden
 
 \begin_layout Standard
 
-\change_inserted -212917129 1399395930
-
 \emph on
 \begin_inset Note Comment
 status collapsed
 
 \begin_layout Plain Layout
 
-\change_inserted -212917129 1399395930
-
 \emph on
 <<Intro needs significant re-write to (a) shorten by half, and (b) replace
  text reused from prior papers.
@@ -162,8 +142,6 @@ status collapsed
 \end_layout
 
 \begin_layout Plain Layout
-
-\change_inserted -212917129 1399395930
 Many modern software systems employ shared-memory multi-threading and are
  built using components such as libraries and frameworks.
  As a result, developers must manage the interactions between multiple threads
@@ -182,8 +160,6 @@ Many modern software systems employ shared-memory multi-threading and are
 \end_layout
 
 \begin_layout Plain Layout
-
-\change_inserted -212917129 1399395930
 Writing code that obeys thread-related policies is difficult, even when
  the policies are known.
  There are many questions that must be answered by the programmer, such
@@ -191,128 +167,6 @@ Writing code that obeys thread-related policies is difficult, even when
 \end_layout
 
 \begin_layout Quotation
-
-\change_inserted -212917129 1399395930
-"Does the policy permit me to touch that data from this function or method?
-\begin_inset Foot
-status collapsed
-
-\begin_layout Plain Layout
-
-\change_inserted -212917129 1399395930
-Because our analysis applies to both C and C++ code, this paper uses the
- terms function and method interchangeably.
-\end_layout
-
-\end_inset
-
- Does it permit me to invoke that method from here? Is that data protected
- by a mutex?
-\begin_inset Foot
-status collapsed
-
-\begin_layout Plain Layout
-
-\change_inserted -212917129 1399395930
-Mutex is the typical term used in C and C++ to denote a variable that serves
- as a lock.
- We will use the terms mutex and lock interchangeably in this document.
-\end_layout
-
-\end_inset
-
- Which mutex protects that data? Do I currently hold the mutex that must
- be held to execute that function? What threads might execute this portion
- of the code, and should they be permitted to do so?"
-\end_layout
-
-\begin_layout Plain Layout
-
-\change_inserted -212917129 1399395930
-The answers to these questions can be both hard to find in documentation
- and difficult or impossible to glean from inspection of code.
- To make matters worse, the need to even ask these questions may not be
- apparent to many programmers.
- Yet similar questions arise for each and every data reference and method
- invocation that executes in the context of a multithreaded system.
-\end_layout
-
-\begin_layout Plain Layout
-
-\change_inserted -212917129 1399395930
-When failures occur, programmers have trouble debugging multi-threaded code,
- in part because the symptoms they observe may lack an obvious connection
- to threading.
- Symptoms can include intermittent and seemingly-random data corruption,
- unexpected system or component pauses or freezes, and occasional obscure
- misbehavior of the application.
- The manifestation of such errors and failures at runtime is often dependent
- on conditions such as timing, context, load, and processor architecture.
- Change the conditions or the timing—by using the debugger, for example—and
- the symptom may change or disappear.
- Alternatively, failures or errors may occur on one out of each million
- executions of the faulty code; this is nearly impossible to isolate in
- a debugger, but still frequent enough to be an issue for long-running or
- frequently-run applications.
-\end_layout
-
-\begin_layout Plain Layout
-
-\change_inserted -212917129 1399395930
-Because debugging these errors and failures is so difficult, programmers
- often fall back on code reviews to help locate the underlying faults in
- the code.
- However, code reviews have limited effectiveness when addressing non-local
- properties such as thread-related policy compliance; the consequences of
- those properties are spread widely and thinly throughout the code.
- This non-locality also means that every instance of each consequence must
- be handled correctly; if even one is wrong, the program may fail.
- These difficulties make static analysis an attractive alternative.
-\change_unchanged
-
-\end_layout
-
-\end_inset
-
-
-\change_deleted -212917129 1399395930
-<<Intro needs significant re-write to (a) shorten by half, and (b) replace
- text reused from prior papers.
- Last two paragraphs of intro propably stay.>>
-\end_layout
-
-\begin_layout Standard
-
-\change_deleted -212917129 1399395930
-Many modern software systems employ shared-memory multi-threading and are
- built using components such as libraries and frameworks.
- As a result, developers must manage the interactions between multiple threads
- as they execute within those components.
- To manage this complexity, developers assume that the libraries and frameworks
- they use will explicitly specify all of the necessary policies, preconditions,
- and postconditions ("thread-related policies", hereafter) of the design
- contract.
- However, many library and framework interfaces lack explicit specifications
- regarding threading and concurrency issues.
- In the absence of explicit specifications, developers cannot comply with
- the unstated thread-related policies.
- This can lead to errors such as state corruption and deadlock, and can
- be a significant cause of security vulnerabilities.
- 
-\end_layout
-
-\begin_layout Standard
-
-\change_deleted -212917129 1399395930
-Writing code that obeys thread-related policies is difficult, even when
- the policies are known.
- There are many questions that must be answered by the programmer, such
- as:
-\end_layout
-
-\begin_layout Quotation
-
-\change_deleted -212917129 1399395930
 "Does the policy permit me to touch that data from this function or method?
 \begin_inset Foot
 status collapsed
@@ -342,9 +196,7 @@ Mutex is the typical term used in C and C++ to denote a variable that serves
  of the code, and should they be permitted to do so?"
 \end_layout
 
-\begin_layout Standard
-
-\change_deleted -212917129 1399395930
+\begin_layout Plain Layout
 The answers to these questions can be both hard to find in documentation
  and difficult or impossible to glean from inspection of code.
  To make matters worse, the need to even ask these questions may not be
@@ -353,9 +205,7 @@ The answers to these questions can be both hard to find in documentation
  invocation that executes in the context of a multithreaded system.
 \end_layout
 
-\begin_layout Standard
-
-\change_deleted -212917129 1399395930
+\begin_layout Plain Layout
 When failures occur, programmers have trouble debugging multi-threaded code,
  in part because the symptoms they observe may lack an obvious connection
  to threading.
@@ -372,9 +222,7 @@ When failures occur, programmers have trouble debugging multi-threaded code,
  frequently-run applications.
 \end_layout
 
-\begin_layout Standard
-
-\change_deleted -212917129 1399395930
+\begin_layout Plain Layout
 Because debugging these errors and failures is so difficult, programmers
  often fall back on code reviews to help locate the underlying faults in
  the code.
@@ -384,13 +232,14 @@ Because debugging these errors and failures is so difficult, programmers
  This non-locality also means that every instance of each consequence must
  be handled correctly; if even one is wrong, the program may fail.
  These difficulties make static analysis an attractive alternative.
-\change_inserted -212917129 1399406064
+\end_layout
+
+\end_inset
+
 
 \end_layout
 
 \begin_layout Standard
-
-\change_inserted -212917129 1399491489
 Writing concurrent programs is a challenging task.
  In addition to the familiar programming errors encountered in sequential
  programming, developers must also consider the potential interactions between
@@ -404,7 +253,7 @@ key "Asanovic:2009"
 \end_inset
 
 .
- An additional source of difficulty is that  many frameworks and libraries
+ An additional source of difficulty is that many frameworks and libraries
  not only impose concurrency and thread-related policies on their clients,
  but also lack explicit documentation of those policies.
  Where such policies are clearly documented, that documentation frequently
@@ -412,64 +261,30 @@ key "Asanovic:2009"
 \end_layout
 
 \begin_layout Standard
-
-\change_deleted -212917129 1399407072
-In spite of the rich literature regarding static analysis for lock-based
- concurrency, C and C++ programmers largely lack access to effective static
- analysis tools that address concurrency issues.
- One of the few widely-available C and C++ static analysis tools is the
- 
-\change_inserted -212917129 1399491391
 Static analysis tools can provide this help.
- The 
-\change_unchanged
-open source Clang static analyzer
-\change_deleted -212917129 1399407072
-, which
-\change_unchanged
- provides a useful thread-safety analysis that covers a limited—but interesting—
-subset of lock-based thread-safety cases.
+ The open source Clang static analyzer provides a useful thread-safety analysis
+ that covers a limited—but interesting—subset of lock-based thread-safety
+ cases.
  However, it lacks support for analysis of concurrency issues that are not
  lock-centric, such as thread confinement of data and expression of thread
  usage policy.
 \end_layout
 
 \begin_layout Standard
-The goals of this work are 
-\change_inserted -212917129 1399491575
-not only 
-\change_deleted -212917129 1399491581
-to enable C and C++ framework and library authors to provide checkable specifica
-tions of their thread-related policies and
-\change_unchanged
- to create a static analysis tool that can help C and C++ programmers find
- their concurrency errors for an interesting subset of both lock-based and
- non-lock-based cases
-\change_inserted -212917129 1399491603
-, but also to enable C and C++ framework and library authors to provide
- checkable specifications of their concurrency and thread-related policies
-\change_unchanged
-.
+The goals of this work are not only to create a static analysis tool that
+ can help C and C++ programmers find their concurrency errors for an interesting
+ subset of both lock-based and non-lock-based cases, but also to enable
+ C and C++ framework and library authors to provide checkable specifications
+ of their concurrency and thread-related policies.
  We accomplish this by (a) extending Clang's existing lock-based thread
  safety analysis for concurrency to include a policy-based thread role analysis
  for access control, (b) enhancing Clang's existing lock-based analysis
  to be more powerful and easier to maintain, (c) providing a cross-translation-u
 nit annotation inference tool that reduces the number of required hand-written
- annotations, and also (d) improving error reporting by tracking the 
-\change_deleted -212917129 1399395806
-origin
-\change_inserted -212917129 1399491588
-provenance
-\change_unchanged
- of each 
-\change_inserted -212917129 1399491648
-analysis 
-\change_unchanged
-finding.
+ annotations, and also (d) improving error reporting by tracking the provenance
+ of each analysis finding.
  We apply previously-known algorithms and techniques in a novel combination
  to produce actionable analysis results in a timely fashion.
-\change_inserted -212917129 1399571069
-
 \end_layout
 
 \begin_layout Section
@@ -517,8 +332,8 @@ y company, and is publicly available as part of the Clang tool-suite.
 
 \begin_layout Standard
 This use-case and focus drove many design decisions for the tool, most notably
- that its analysis operates one method at a time, using annotations on methods
- to carry requirements across method calls.
+ that its analysis operates one function at a time, using annotations on
+ functions to carry requirements across function calls.
  These decisions serve its primary constituency by providing not only maximum
  documentation of locking protocols but also the ability to run the analysis
  on each translation unit (TU, hereafter) in isolation from the rest of
@@ -558,9 +373,9 @@ key "Sutherland2002,Sutherland2008,Sutherland2010"
  It allows users to declare various "roles" threads may perform, identify
  program points where thread roles are added to—or removed from—the set
  of roles held by "the current thread" (that is, any thread that executes
- that program point), and identify constraints on methods and/or data that
- specify which combinations of thread roles are permitted to invoke the
- annotated method (or access the annotated data).
+ that program point), and identify constraints on functions and/or data
+ that specify which combinations of thread roles are permitted to invoke
+ the annotated function (or access the annotated data).
  The analysis then checks whether the as-written code and the expressed
  thread-related policy are consistent.
  
@@ -574,15 +389,15 @@ access
 \emph default
  control for both code and data without regard to the presence or absence
  of locks.
- The user-written thread role constraints for methods, in combination with
- the analyzed consequences of those constraints, provides two kinds of useful
- concurrency-related information for data.
+ The user-written thread role constraints for functions, in combination
+ with the analyzed consequences of those constraints, provides two kinds
+ of useful concurrency-related information for data.
  First, data that is accessed solely from a thread role that is unique is
  confined to a single thread; therefore concurrency is irrelevant with respect
  to that data.
  Second, data that is accessed from one or more non-unique thread roles
  requires additional concurrency control—such as locks or constraints on
- methods—because the data is potentially shared among multiple threads.
+ functions—because the data is potentially shared among multiple threads.
  
 \end_layout
 
@@ -1051,8 +866,8 @@ Acquiring and Releasing Capabilities
 \end_layout
 
 \begin_layout Standard
-Certain methods and functions are annotated to indicate that they acquire
- (or release) a capability as part of their operation.
+Certain functions are annotated to indicate that they acquire (or release)
+ a capability as part of their operation.
  For mutexes, these are typically the class 
 \begin_inset listings
 lstparams "basicstyle={\ttfamily},breaklines=true"
@@ -1079,7 +894,7 @@ unlock()
 
 \end_inset
 
- methods (see lines 3 and 4 of listing 
+ functions (see lines 3 and 4 of listing 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "lis:Example-Capability-Declarations"
@@ -1087,9 +902,10 @@ reference "lis:Example-Capability-Declarations"
 \end_inset
 
 ).
- For thread roles, these are notional methods that are optimized away before
- runtime because thread roles have no runtime existence (lines 8 and 9).
- In either case, the capabilities are acquired or released when the method
+ For thread roles, these are notional functions that are optimized away
+ before runtime because thread roles have no runtime existence (lines 8
+ and 9).
+ In either case, the capabilities are acquired or released when the function
  is invoked.
  The analysis also supports 
 \begin_inset listings
@@ -1119,8 +935,8 @@ tryLock()
 
 \end_inset
 
- style methods, whose specification states that they acquire the lock if
- it is available and return without blocking if the lock is held by another
+ style functions, whose specification states that they acquire the lock
+ if it is available and return without blocking if the lock is held by another
  thread.
 \end_layout
 
@@ -1414,8 +1230,8 @@ Requirements for Code
 \end_layout
 
 \begin_layout Standard
-Methods and data can be annotated to permit invocation or access only from
- capability environments
+Functions and data can be annotated to permit invocation or access only
+ from capability environments
 \begin_inset Foot
 status collapsed
 
@@ -1501,7 +1317,7 @@ reference "lis:Requirements-for-Code"
  When a capability expression fails to constrain the value of a capability,
  the unconstrained capability is a "don't-care" value.
  That is, it could be either held or not-held without effect on the requirement.
- To correctly invoke an annotated method or access annotated data, callers
+ To correctly invoke an annotated function or access annotated data, callers
  (or accessors) must hold a combination of capabilities that satisfies the
  expression; the analysis reports an error for all other callers.
  Data items that lack a capability requirement are assumed to be unconstrained
@@ -1516,7 +1332,7 @@ There is an important distinction between functions whose capability requirement
 \emph on
 Unconstrained
 \emph default
- methods neither require nor forbid any capability; they are marked with
+ functions neither require nor forbid any capability; they are marked with
  the annotation 
 \begin_inset listings
 lstparams "basicstyle={\ttfamily},breaklines=true"
@@ -1531,14 +1347,14 @@ REQUIRES(true)
 \end_inset
 
 .
- The implementation of an unconstrained method must be limited to call only
- other unconstrained methods.
- One common case of unconstrained methods are pure functions, whose output
+ The implementation of an unconstrained function must be limited to call
+ only other unconstrained functions.
+ One common case of unconstrained functions are pure functions, whose output
  depends entirely on their input parameters; for example, many math functions
  from the standard libraries have this property.
- The multithreaded Listener pattern provides another example; its methods
+ The multithreaded Listener pattern provides another example; its functions
  for adding and removing listeners are invokable from any thread, even though
- these methods necessarily have side effects.
+ these functions necessarily have side effects.
 \end_layout
 
 \begin_layout Standard
@@ -1624,8 +1440,8 @@ status open
 ve or always-shared, thread role names can appear in either kind of requirement
  annotation without regard to their exclusivity.
  Mixing thread roles and mutexes in a single requirement is common in cases
- where a method should only be invoked from a limited group of thread roles
- and also must obey a specified locking discipline (
+ where a function should only be invoked from a limited group of thread
+ roles and also must obey a specified locking discipline (
 \emph on
 e.g.
 \emph default
@@ -1653,7 +1469,7 @@ enqueueLogData
 
 \end_inset
 
- method used by 
+ function used by 
 \begin_inset listings
 lstparams "basicstyle={\ttfamily},breaklines=true"
 inline true
@@ -1705,7 +1521,7 @@ dequeueLogData
 
 \end_inset
 
- method used by the 
+ function used by the 
 \begin_inset listings
 lstparams "basicstyle={\ttfamily},breaklines=true"
 inline true
@@ -1732,7 +1548,7 @@ moveAileron
 
 \end_inset
 
- method usable only from the 
+ function usable only from the 
 \begin_inset listings
 lstparams "basicstyle={\ttfamily},breaklines=true"
 inline true
@@ -1943,7 +1759,7 @@ push_back()
 
 \end_inset
 
- method never throws an exception.
+ function never throws an exception.
 \end_layout
 
 \end_inset
@@ -2055,8 +1871,8 @@ mu
 
 \end_inset
 
- is unlocked before return from the method; consequently, the capability
- environment is unchanged on method exit.
+ is unlocked before return from the function; consequently, the capability
+ environment is unchanged on function exit.
  This is consistent with the lack of an 
 \begin_inset listings
 lstparams "basicstyle={\ttfamily},breaklines=true"
@@ -2083,7 +1899,7 @@ RELEASE
 
 \end_inset
 
- annotation on the method.
+ annotation on the function.
 \end_layout
 
 \begin_layout Standard
@@ -2408,10 +2224,10 @@ Thread Safety Analysis Implementation
 
 \begin_layout Standard
 The thread safety analysis enforces the expressed locking discipline and
- thread usage policy using a per-method computation of the capability environmen
-t, which is then compared with the expressed requirements on methods invoked
- from and data accessed by that method.
- Even when operating in this core one-method-at-a-time mode, the analysis
+ thread usage policy using a per-function computation of the capability
+ environment, which is then compared with the expressed requirements on
+ functions invoked from and data accessed by that function.
+ Even when operating in this core one-function-at-a-time mode, the analysis
  tool must nevertheless address issues raised by the interactions between
  functions.
  This requires design decisions regarding the origin of capability requirements
@@ -2420,7 +2236,7 @@ t, which is then compared with the expressed requirements on methods invoked
 \end_layout
 
 \begin_layout Subsubsection
-Core per-method analysis
+Core per-function analysis
 \begin_inset CommandInset label
 LatexCommand label
 name "sub:Core-per-method-analysis"
@@ -2437,8 +2253,8 @@ The capabilities held by a thread at any given moment during program execution
 capability set
 \emph default
 ; this is a runtime concept.
- A thread's capability set could be modeled at runtime as a set of boolean
- values, using one boolean for each thread role capability, and two for
+ A thread's capability set could be modeled at runtime as a set of Boolean
+ values, using one Boolean for each thread role capability, and two for
  each mutex capability.
 \begin_inset Foot
 status collapsed
@@ -2467,9 +2283,9 @@ possible capabilities
 \end_layout
 
 \begin_layout Standard
-For a successful static analysis we must produce, for each program point
- of interest, an approximation of the possible capabilities at that point
- that is not only computable and conservatively correct, but also useful.
+A successful static analysis must produce, for each program point of interest,
+ an approximation of the possible capabilities at that point that is not
+ only computable and conservatively correct, but also useful.
  We call this approximation the 
 \emph on
 capability environment
@@ -2509,10 +2325,10 @@ key "Bryant1986"
 \end_layout
 
 \begin_layout Standard
-To check a single method, the thread safety analysis must compute a capability
- environment for each program point in the method.
- In a fully-annotated program, each method or function has an annotation
- stating the capabilities it requires.
+To check a single function, the thread safety analysis must compute a capability
+ environment for each program point in the function.
+ In a fully-annotated program, each function has an annotation stating the
+ capabilities it requires.
 \begin_inset Foot
 status open
 
@@ -2523,12 +2339,12 @@ We discuss analysis for partially-annotated programs in section III-C.
 \end_inset
 
  The thread safety analysis uses this requirement as the initial capability
- environment on entry to the method.
+ environment on entry to the function.
 \end_layout
 
 \begin_layout Standard
 The algorithm used for computing the capability environment for each program
- point within a method is a standard iterative forwards flow analysis.
+ point within a function is a standard iterative forwards flow analysis.
  The lattice for the iteration is a disjunction lattice with Boolean expressions
  as members, 
 \begin_inset listings
@@ -2587,8 +2403,8 @@ true
 \end_inset
 
  is the constraint expression (and thus the initial capability environment)
- for unconstrained methods; nevertheless, our iterative flow analysis requires
- that Top must be less precise than any legal lattice value.
+ for unconstrained functions; nevertheless, our iterative flow analysis
+ requires that Top must be less precise than any legal lattice value.
 \end_layout
 
 \begin_layout Standard
@@ -2645,15 +2461,15 @@ UNKNOWN
 \end_layout
 
 \begin_layout Standard
-Once the algorithm has converged, we make a final pass through the method
+Once the algorithm has converged, we make a final pass through the function
  during which we (a) check that the capability environment satisfies each
- capability requirement we encounter, (b) check each change to the capability
- environment to ensure that all global constraints imposed by incompatibility
- and lock ordering annotations are obeyed, (c) ensure that all exits from
- strongly-connected regions in the CFG have identical capability environments,
- (d) ensure that all exits from the method have identical capability environment
-s, and (e) ensure that the capability environment on function return matches
- that specified by its annotations.
+ capability requirement we encounter, (b) check each modification of the
+ capability environment to ensure that all global constraints imposed by
+ incompatibility and lock ordering annotations are obeyed, (c) ensure that
+ all exits from strongly-connected regions in the CFG have identical capability
+ environments, (d) ensure that all exits from the function have identical
+ capability environments, and (e) ensure that the capability environment
+ on function return matches what is specified by the function's annotations.
  That is, for each function whose annotations neither acquire nor release
  capabilities, the capability environment on return must be identical to
  the entry environment; similarly, for each function whose annotations specify
@@ -2688,18 +2504,18 @@ status open
 \end_layout
 
 \begin_layout Subsubsection
-Analysis for Multiple Methods in a TU
+Analysis for Multiple Functions in a TU
 \end_layout
 
 \begin_layout Standard
-In basic operation, the core per-method analysis depends on explicit annotations
- to carry capability environment information across methods; that is, it
- expects fully annotated programs.
+In basic operation, the core per-function analysis depends on explicit annotatio
+ns to carry capability environment information across functions; that is,
+ it expects fully annotated programs.
  This mode of operation provides two key benefits: first, it provides in-code
  documentation of all thread safety policies and requirements; second, it
  supports running the thread safety analysis as part of every system build.
  The associated cost is that users must annotate many (for mutexes) or substanti
-ally all (for thread roles) functions or methods in their programs.
+ally all (for thread roles) functions or functions in their programs.
  This cost can be prohibitive for many development teams.
 \end_layout
 
@@ -2717,7 +2533,7 @@ key "Sutherland2010"
 
 \end_inset
 
-, for example, showed that inheritance from library and framework methods
+, for example, showed that inheritance from library and framework functions
  allows users to avoid writing significant numbers of thread safety annotations.
 \end_layout
 
@@ -2777,8 +2593,7 @@ Satisfying the second and third requirements requires some form of closed
 \emph on
 inference scope
 \emph default
-, hereafter) as well as knowledge of the methods and functions that are
- its 
+, hereafter) as well as knowledge of the functions that are its 
 \emph on
 entire interface
 \emph default
@@ -2807,7 +2622,8 @@ reference "sub:Choosing-a-Scope"
  To discuss the operation of the inference algorithm, we will assume that
  these requirements are met.
  Further, we assume that the inference analysis can see capability requirement
- annotations for each method that is part of the API of the inference scope
+ annotations for each function that is part of the API of the inference
+ scope
 \begin_inset Foot
 status collapsed
 
@@ -2829,17 +2645,17 @@ specific origin
  That is, we can assume their correctness on one side of the interface and
  check it on the other.
  Under these circumstances, we can infer the capability requirements of
- all methods in the inference scope that neither are part of its API nor
+ all functions in the inference scope that neither are part of its API nor
  have a specific capability requirement (the 
 \emph on
-inferable internal methods
+inferable internal functions
 \emph default
 , hereafter).
 \end_layout
 
 \begin_layout Standard
 The inference algorithm is essentially identical to the iterative flow analysis
- used inside individual methods.
+ used inside individual functions.
  Specifically, it uses the same lattice and 
 \begin_inset listings
 lstparams "basicstyle={\ttfamily},breaklines=true"
@@ -2855,16 +2671,16 @@ join()
 
  operator with the same iterative forwards flow analysis.
  The key difference is that the inference algorithm iterates over the call
- graph of the inference scope using the annotations on API methods as its
- initial values.
+ graph of the inference scope using the annotations on API functions as
+ its initial values.
  Where the checking algorithm traverses basic blocks, the inference algorithm
- traverses functions and methods.
+ traverses functions and functions.
  Where the checking algorithm propagates lattice values across control-flow
  edges in the CFG, the inference algorithm propagates lattice values across
  edges in the call graph.
  Because of this similarity, we take the obvious implementation approach
- of recursively invoking the per-method analysis to accomplish traversal
- of methods and functions.
+ of recursively invoking the per-function analysis to accomplish traversal
+ of functions.
 \end_layout
 
 \begin_layout Standard
@@ -2883,7 +2699,7 @@ UNKNOWN
 \end_inset
 
  as Top.
- When an API method lacks a known requirement, the analysis uses 
+ When an API function lacks a known requirement, the analysis uses 
 \begin_inset listings
 lstparams "basicstyle={\ttfamily},breaklines=true"
 inline true
@@ -2897,8 +2713,8 @@ UNKNOWN
 \end_inset
 
  in place of the missing capability requirement.
- Consequently, the initial capability environment inside the method is also
- 
+ Consequently, the initial capability environment inside the function is
+ also 
 \begin_inset listings
 lstparams "basicstyle={\ttfamily},breaklines=true"
 inline true
@@ -2912,8 +2728,8 @@ UNKNOWN
 \end_inset
 
 .
- When such a method calls an inferable internal method, the calling environment
- of the internal method must similarly be 
+ When such a function calls an inferable internal function, the calling
+ environment of the internal function must similarly be 
 \begin_inset listings
 lstparams "basicstyle={\ttfamily},breaklines=true"
 inline true
@@ -2955,22 +2771,22 @@ true
 
 \end_inset
 
-, which is used for unconstrained methods.
- We use Top as the initial calling environment for all methods that both
+, which is used for unconstrained functions.
+ We use Top as the initial calling environment for all functions that both
  lack a predecessor in the call graph and also lack a known capability requireme
 nt.
 \end_layout
 
 \begin_layout Standard
 When the algorithm finishes, it has computed an observed calling environment
- for all methods in the call graph; this result is necessarily complete
- only for an inference scope's internal methods.
+ for all functions in the call graph; this result is necessarily complete
+ only for an inference scope's internal functions.
  We use the calling environment as the capability requirement (and consequently
- the initial capability environment) for each inferable internal method;
- internal methods that already have known capability requirements keep those
- requirements.
+ the initial capability environment) for each inferable internal function;
+ internal functions that already have known capability requirements keep
+ those requirements.
  When the inference algorithm produces a calling environment of Top for
- an inferable internal method, we say that the method has an 
+ an inferable internal function, we say that the function has an 
 \emph on
 unknown capability environment
 \emph default
@@ -2982,14 +2798,14 @@ The inference algorithm provides additional motivation for inheriting thread
  safety requirements from parent to child.
  When the definition, implementation and call site are all in the same inference
  scope, the inference algorithm can directly see everything it requires
- to determine both the methods that are potentially invoked from the call
+ to determine both the functions that are potentially invoked from the call
  site and their capability requirements (if any).
  Inference of missing annotations can succeed in this case.
  Alternatively, when the implementation and/or the call site are in a different
  inference scope from the definition, the definition must be part of the
  API of some visible inference scope.
  Consequently, there must be a known capability requirement that applies
- to the method definition (whether due to a predefined default assumption,
+ to the function definition (whether due to a predefined default assumption,
  an explicitly written annotation, inheritance from a parent, or some other
  mechanism); this knowledge provides the necessary starting point for the
  inference algorithm even when the implementation is in a different inference
@@ -3013,11 +2829,24 @@ Our discussion of capability requirement inference thus far has carefully
  Because the inference algorithm requires a closed scope with a known API,
  there are two obvious choices for the inference scope in C and C++ programs.
  The simplest choice is to define the inference scope as the TU.
- The language definition then tells us exactly which methods are inferable
- internal methods; everything else is the API.
- Unfortunately, this choice provides very few inferable internal methods;
+ The language definition then tells us exactly which functions are inferable
+ internal functions; everything else is the API.
+ Unfortunately, this choice provides very few inferable internal functions;
  the potential reduction in the number of annotations the user must write
- is too small to be worth the implementation effort.
+ is too small to be worth the implementation effort
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+This is a pretty strong claim, and one which might rightly be false -- consider
+ file static functions and private class member functions in the TU.
+ Those can frequently outnumber public, protected and external functions
+ in a good implementation.
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -3115,7 +2944,7 @@ key "C++SG2"
 
 .
  In its current form, the module specification focuses on identifying the
- header files that are the API for various modules in a system.
+ header files that are the API for various components in a system.
  This information is used to support pre-compilation of the API headers,
  consequently avoiding the need to repeatedly compile imported header files
  in every TU.
@@ -3136,11 +2965,10 @@ ts for sound inference: they lack identification of the TUs that implement
 Although there is ongoing standards activity that may add these missing
  pieces, at the moment we rely upon the user and the build system to provide
  three pieces of information.
- First, we need the list of all TUs that implement the module in question;
+ First, we require the list of all TUs that implement the module in question;
  this is presented on the command line when users invoke the analysis tool
  in inference mode.
- Second, the user must provide on the command line the name of the module
- those TUs implement.
+ Second, the user must provide the name of the module those TUs implement.
  Finally, we rely upon users to place an annotation in the source code of
  each of these TUs that also names the module that the TU partially implements.
  Our inference results are thus conditionally-sound; they depend upon the
@@ -3171,13 +2999,13 @@ Conflicting User Requirements for Static Analysis at Scale
 Some development teams ("TU-at-a-time" teams) require that the static analyses
  they adopt have the ability to produce full-fidelity results even when
  processing individual TUs.
- This allows them to integrate the analysis into their build system "as
- though" it were part of the compiler; thus the analysis is performed on
- every compilation of every TU.
+ This allows them to integrate an analysis into their build system "as though"
+ it were part of the compiler; thus the analysis is performed on every compilati
+on of every TU.
  This model of analysis permits maximum parallelization of builds across
  dozens (or thousands) of distinct processors and machines.
  This comes at a cost, however.
- Each method that can be invoked from outside its home TU requires sufficient
+ Each function that can be invoked from outside its home TU requires sufficient
  annotation to permit independent analysis (thread safety annotations, in
  our case).
  Further, for many such development teams, these annotations are hand-written
@@ -3221,7 +3049,7 @@ We believe that to be successful, static analysis tools must support both
  over the large cross-TU inference scope using the inferred annotations
  (which is a trivial addition to the cross-TU analysis), which supports
  annotation-minimizer teams; or (b) recording the inferred thread safety
- requirement annotations for otherwise-unannotated methods in the source
+ requirement annotations for otherwise-unannotated functions in the source
  code.
  This makes the results of the inference manifest in the source code, thus
  supporting TU-at-a-time development teams.
@@ -3270,16 +3098,16 @@ REQUIRES
 
 , and so on.
  The regular requirement annotations are considered to be design commitments;
- they are an important part of the interface of the functions and methods
+ they are an important part of the interface of the functions and functions
  they apply to, and should be considered to be "essential" rather than "incident
 al." Changes to such design commitments are typically infrequent.
  Note-style annotations, by comparison, represent incidental knowledge that
  is purely a consequence of an essential design commitment somewhere else;
- they are inferred based upon the design requirements of the methods that
+ they are inferred based upon the design requirements of the functions that
  transitively invoke them.
  Consequently, the content of these note-style annotations may change for
  non-local reasons---because a code modification elsewhere in the inference
- scope adds a new path that reaches some internal method, for example.
+ scope adds a new path that reaches some internal function, for example.
 \end_layout
 
 \begin_layout Standard
@@ -3302,11 +3130,22 @@ This is a standard part of the Clang tool suite that accepts xml-style input
 
  to remove old note-style annotations, if necessary, and to write the newly
  inferred note-style capability requirements into the source code.
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+Does it matter that this isn't implemented, or likely to be implemented
+ prior to SCAM?
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-When performing thread safety checking of a method, the thread safety analysis
- treats note-style annotations as though they were ordinary requirement
+When performing thread safety checking of a function, the thread safety
+ analysis treats note-style annotations as though they were ordinary requirement
  annotations.
  The only difference arises during error reporting: when a note-style annotation
  is implicated in a failed consistency check, the tool reports the inconsistency
@@ -3338,9 +3177,9 @@ Improving error reporting by tracking deponents
 The thread safety analysis produces user-visible error messages when it
  detects an inconsistency between the thread safety annotations and the
  as-written code.
- A typical message may indicate, for example, a method call site and report
+ A typical message may indicate, for example, a function call site and report
  that the caller fails to satisfy the capability requirement of the invoked
- method.
+ function.
  The message typically provides the capability environment at the point
  of inconsistency and the unsatisfied requirement as additional information
  for the programmer.
@@ -3386,8 +3225,8 @@ mu2
 \begin_layout Standard
 In fully annotated programs, the requirement is written directly and is
  easy to find.
- Similarly, when the current method both has an explicit capability requirement
- of its own and also has relatively simple control-flow, it is straight-forward
+ Similarly, when the current function both has an explicit capability requiremen
+t of its own and also has relatively simple control-flow, it is straight-forward
  to understand why the capability environment has the particular capabilities
  shown.
  However, in large functions with complicated control flow, the origin of
@@ -3400,9 +3239,9 @@ In fully annotated programs, the requirement is written directly and is
 Using the inference analysis adds another source of possible confusion.
  For example, when the analysis is being used in annotations-minimization
  mode, the explicit annotations giving rise to the inferred requirements
- that produce the current method's capability environment may be distant
- from the method in terms both of the call graph and also of the file in
- which they appear.
+ that produce the current function's capability environment may be distant
+ from the function in terms both of the call graph and also of the file
+ in which they appear.
  This confusion due to annotation inference both resembles—on a much larger
  scale—and compounds with, that posed by large functions with complicated
  control flow.
@@ -3422,9 +3261,9 @@ This error reporting issue is not unique to our thread safety analysis;
 \end_layout
 
 \begin_layout Standard
-Developers need assistance determining, for each variable in the inconsistency
- report, why the thread safety analysis has the particular values in the
- capability environment (and/or requirement) at the point of inconsistency.
+For each variable in the inconsistency report, developers need assistance
+ determining why the thread safety analysis has the particular values in
+ the capability environment (and/or requirement) at the point of inconsistency.
  We address this issue by tracking the deponents of each increment of knowledge
  gained during the flow analysis.
 \begin_inset Foot
@@ -3444,8 +3283,8 @@ A deponent is one who attests to the truth of an assertion, typically in
 \end_layout
 
 \begin_layout Standard
-To compute the deponents during our flow analysis (whether within a method
- or across TUs), the analysis maintains for each relevant variable in the
+To compute the deponents during our flow analysis (whether within a function
+ or across TUs), the analysis maintains, for each relevant variable in the
  lattice, the set of most-recent annotations that justify the variable's
  presence in the lattice.
  The rules for tracking deponent information are:
@@ -3480,12 +3319,16 @@ n, where annotations serve as definitions.
 \begin_layout Standard
 At any given point, the set of all such annotations for all variables in
  the support of the BDD are the answer to the question "why do we think
- this is the current lattice expression?" During the core per-method thread
+ this is the current lattice expression?" During the core per-function thread
  safety analysis checking pass, the lattice expression at any particular
  program point is the current capability environment at that program point.
  When the cross-TU inference analysis reaches its fixed point, the lattice
- expression at any particular function or method entry is the observed calling
- environment for that method or function.
+ expression at any particular function entry is the observed calling environment
+ for that
+\change_deleted -212917129 1399582670
+ 
+\change_unchanged
+ function.
  In either case, the annotations in the deponent sets are the most recent
  deponents that attest to the truth of the current lattice expression; they
  are the reason for the analysis' knowledge.
@@ -3494,7 +3337,7 @@ At any given point, the set of all such annotations for all variables in
 \begin_layout Standard
 These deponent sets are insufficient to solve an additional problem.
  Recall that the cross-TU inference analysis requires known capability requireme
-nts for the APIs functions and methods exported from each module.
+nts for the APIs functions exported from each module.
  It uses the 
 \begin_inset listings
 lstparams "basicstyle={\ttfamily},breaklines=true"
@@ -3552,7 +3395,7 @@ UNKNOWN
 .
  In past case studies, this led to a frequently-experienced and vexing problem
  when analyzing partially-annotated programs: the analysis reported an inconsist
-ency when a method of interest makes a function call, providing a message
+ency when a function of interest makes a function call, providing a message
  such as
 \begin_inset listings
 lstparams "basicstyle={\ttfamily},breaklines=true"
@@ -3568,14 +3411,14 @@ status open
 
 .
  This message indicates that the analysis was unable to determine the capability
- environment for the current method.
+ environment for the current function.
  To resolve the issue, we needed to add one or more currently-missing annotation
 s.
- The missing annotations are probably capability requirements for API methods
+ The missing annotations are probably capability requirements for API functions
  of the current module.
  In the absence of deponent information, programmers had to trace backwards
- not only through the per-method control-flow, but also through the module's
- call graph until they reached one or more API methods that lacked capability
+ not only through the per-function control-flow, but also through the module's
+ call graph until they reached one or more API functions that lacked capability
  requirements.
 \end_layout
 
@@ -3657,7 +3500,7 @@ key "Engler2003,Henzinger2004,Naik2006,Pratikakis2006"
 \end_inset
 
  assure the absence of data races through the use of data flow-based and
- context-sensitive methods; and 
+ context-sensitive functions; and 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "Sterling1993"
@@ -3705,7 +3548,7 @@ This paper is the result of the authors' efforts to understand and design
  The unified analysis is funded and currently being built.
  There are several important limitations in the current design other than
  its partially-constructed state.
- First, it lacks support for C++ lambda functions.
+ First, it lacks support for C++ lambdas.
  Second, its current design provides only limited support for function pointers
  and templates.
  Users can apply a capability requirement to a function pointer field or
@@ -3719,8 +3562,8 @@ This paper is the result of the authors' efforts to understand and design
 \begin_layout Standard
 Third, many interesting uses of templates require tracking the specific
  functions available to each instantiation of the template.
- This often requires analysis based on the actual arguments passed to the
- constructor call used to create a particular object of the template type.
+ This often requires analysis based on the actual template arguments used
+ to instantiate a particular template type.
  Also, effective analysis of templates often requires the ability to distinguish
  between cases such as 
 \begin_inset listings
@@ -3821,7 +3664,7 @@ Finally, use of note-style annotations in TU-at-a-time analysis mode entails
  during annotation inference, our current implementation is unable to record
  those deponents along with the annotation itself.
  Consequently, when running in TU-at-a-time mode, the analysis can only
- track deponents back to the beginning of each method.
+ track deponents back to the beginning of each function.
  The usability impact of this limitation remains to be evaluated.
 \end_layout
 
@@ -3901,7 +3744,7 @@ This content appears to be redundant, as it is covered elsewhere.
 \emph on
 in
 \emph default
-sensitive within each method.
+sensitive within each function.
  As a consequence, the analysis required users to write extra annotations
  when their code contained runtime predicates that affect knowledge of thread
  roles.
