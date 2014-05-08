@@ -85,7 +85,61 @@ Remains to be written
 
 \begin_layout Section
 Introduction
-\change_inserted -212917129 1399395943
+\change_inserted -212917129 1399571424
+
+\end_layout
+
+\begin_layout Standard
+
+\change_inserted -212917129 1399571425
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+
+\change_inserted -212917129 1399571425
+Bits of awesomeness from our design that we need to call out: 
+\end_layout
+
+\begin_layout Enumerate
+
+\change_inserted -212917129 1399571425
+two concurrency analyses for the price of one
+\end_layout
+
+\begin_layout Enumerate
+
+\change_inserted -212917129 1399571425
+Support for use cases spanning spectrum from per-TU-w/-full-local-annotation
+ to per-big-chunk-w/-minimal-annotation (and hybrids in between)
+\end_layout
+
+\begin_layout Enumerate
+
+\change_inserted -212917129 1399571425
+Demonstration that computing provenance of results is 
+\series bold
+trivial
+\series default
+.
+ Other inference-style analysis should do this too.
+\end_layout
+
+\begin_layout Enumerate
+
+\change_inserted -212917129 1399571425
+Supporting Boolean logic broadens analysis toolkit generally.
+\end_layout
+
+\begin_layout Plain Layout
+
+\change_inserted -212917129 1399571425
+Need to make sure these things are highlighted in the intro, not hidden
+ in the last paragraph.
+\end_layout
+
+\end_inset
+
 
 \end_layout
 
@@ -95,7 +149,7 @@ Introduction
 
 \emph on
 \begin_inset Note Comment
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -414,6 +468,8 @@ analysis
 finding.
  We apply previously-known algorithms and techniques in a novel combination
  to produce actionable analysis results in a timely fashion.
+\change_inserted -212917129 1399571069
+
 \end_layout
 
 \begin_layout Section
