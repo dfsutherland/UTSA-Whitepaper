@@ -319,16 +319,16 @@ contributions section
 
 \begin_layout Standard
 
-\change_inserted -212917129 1399637748
-In this paper we show that a single implementation can perform a traditional
- lock-based concurrency analysis and a thread role analysis simultaneously,
- with both implementation and runtime cost comparable to that of either
- analysis in isolation.
+\change_inserted -212917129 1399663371
+In this paper we show that a single implementation can perform both a traditiona
+l lock-based concurrency analysis and a thread role analysis simultaneously,
+ with implementation and runtime cost comparable to that of either analysis
+ in isolation.
  We show a straight-forward approach to supporting use cases spanning the
  spectrum from per-TU-w/-full-local-annotation to per-big-chunk-w/-minimal-annot
 ation (and hybrids in between).
  We demonstrate that producing error messages that include the provenance
- of analysis findings is nearly trivial; and argue that this capability
+ of analysis findings is nearly trivial, and argue that this capability
  should be provided as a matter of course by any inference-based analysis.
  Finally, we expand the range of analyses that can be built using the Clang
  static analyzer.
