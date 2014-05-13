@@ -3325,10 +3325,47 @@ A deponent is one who attests to the truth of an assertion, typically in
 
 \end_inset
 
- We provide these deponents as additional information attached to each error
- report.
- This additional information provides developers with a direct answer to
- the question above.
+ 
+\change_inserted -212917129 1400011449
+A complete collection of the deponents of a particular result are its 
+\emph on
+provenance
+\emph default
+.
+ 
+\change_deleted -212917129 1400011481
+We
+\change_inserted -212917129 1400011483
+By
+\change_unchanged
+ provid
+\change_inserted -212917129 1400011488
+ing
+\change_deleted -212917129 1400011486
+e
+\change_unchanged
+ the
+\change_deleted -212917129 1400011493
+se
+\change_unchanged
+ 
+\change_deleted -212917129 1400011500
+deponents as additional information attached to
+\change_inserted -212917129 1400011502
+provenance of
+\change_unchanged
+ each error report
+\change_inserted -212917129 1400011511
+, we give 
+\change_deleted -212917129 1400011516
+.
+ This additional information provides 
+\change_unchanged
+developers 
+\change_deleted -212917129 1400011519
+with
+\change_unchanged
+ a direct answer to the question above.
 \end_layout
 
 \begin_layout Standard
@@ -3503,6 +3540,23 @@ UNKNOWN
 \end_inset
 
  value into the analysis lattice.
+\change_inserted -212917129 1400011549
+
+\end_layout
+
+\begin_layout Standard
+
+\change_inserted -212917129 1400011919
+Tracking the provenance of analysis results is nearly trivial.
+ Computing reaching definitions is, after all, a problem routinely assigned
+ for homework in undergraduate classes.
+ Most iterative inference-style algorithms can easily be modified to track
+ the individual deponents that collectively represent the provenance of
+ their results.
+ We include this discussion to urge authors of other inference-based analyses
+ to use this simple technique to improve the usability of their findings.
+\change_unchanged
+
 \end_layout
 
 \begin_layout Section
